@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="./socketio.js"></script>
+  <title>socketIoClient</title>
+</head>
+
+<body>
+  <script type="text/javascript">
+    var iosocket = null;
+    window.onload = () => {
+      iosocket = io.connect('http://localhost:9000');
+      iosocket.on('connecte', () => {
+        iosocket.send('hello from socket')
+      })
+      iosocket.on('message', (message) => {
+        var chatroom = document.querySelector('#chatroom')
+        chatroom.innerHTML += message + '<br/>'
+      })
+      iosocket.on('disconnect', () => {
+        console.log("服务端关闭");
+      })
+
+      function send() {
+        iosocket.send(sayinput.value);
+        sayinput.value = '';
+      }
+      document.onkeyup = (event) => {
+        if (event.keyCode == 13) {
+          send()
+        }
+      }
+    }
+  </script>
+</body>
+
+</html>
